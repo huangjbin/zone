@@ -1,0 +1,60 @@
+server:
+  #端口
+  port: 8882
+  servlet:
+    #路径
+    context-path: /quartz_module
+
+spring:
+  #数据库配置
+  datasource:
+    username: hjb
+    password: hy@tx2018
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.18.125.205:3306/IOT_Platform?characterEncoding=UTF-8
+  #RabbitMQ
+  rabbitmq:
+    host: 172.18.125.205
+    port: 5672
+    username: test
+    password: test
+    virtual-host: /
+
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml
+  type-aliases-package: com.zone.quartz_module.pojo
+
+http:
+  #最大连接数
+  maxTotal: 20
+  #并发数
+  defaultMaxPerRoute: 5
+  #创建连接的最长时间
+  connectTimeout: 4000
+  #从连接池中获取到连接的最长时间
+  connectionRequestTimeout: 1000
+  #数据传输的最长时间
+  socketTimeout: 10000
+  #提交请求前测试连接是否可用
+  staleConnectionCheckEnabled: true
+
+
+#日志配置
+logging:
+  level:
+    com:
+      zone:
+        quartz_module:
+          mapper: info
+
+
+#######################   模块间url等信息配置   #######################
+module_net:
+  system_url: http://172.18.125.203:9527/system_module
+  dev_url: http://172.18.125.203:9527
+  find_user_by_ids: ${module_net.system_url}/user/module/findUserByIds
+  find_auth: ${module_net.system_url}/auth/findAuth
+  finddevs_by_key: ${module_net.dev_url}/devmodule/api/find_devs_params_by_key
+  get_cron: http://172.18.125.203:9527/api/descriptor/
+
+

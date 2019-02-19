@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zone.quartz_module.mapper.TaskLogMapper">
+
+    <!-- 查询所有的定时任务********************************************************************************************* -->
+
+    <select id="selectTaskLogs" parameterType="com.zone.quartz_module.param.FindTaskLog"
+            resultType="com.zone.quartz_module.pojo.TaskLog">
+        select * from mon_task_log where 1=1
+        <if test="msg != null">
+            and `msg` LIKE CONCAT('%',#{msg},'%')
+        </if>
+        <if test="result != null">
+            and `result`=#{result}
+        </if>
+        <if test="page.startNumber != null">
+            limit #{page.startNumber},#{page.pageSize}
+        </if>
+    </select>
+
+    <!-- 查看日志总数********************************************************************************************* -->
+
+    <select id="totalTaskLog" resultType="long">
+		select count(*) from
+		mon_task_log
+	</select>
+
+    <!-- 添加日志********************************************************************************************* -->
+
+    <insert id="addTaskLog" parameterType="com.zone.quartz_module.pojo.TaskLog" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into
+		mon_task_log(task_id,task_detail_id,msg,run_time,end_time,result,remark)
+		VALUES(#{task_id},#{task_detail_id},#{msg},#{run_time},#{end_time},#{result},#{remark})
+	</insert>
+
+    <!-- 更新日志********************************************************************************************* -->
+
+    <update id="updateTaskLog">
+		update mon_task_log set
+		result = #{mResult}, end_time=#{mEndTime} where id = #{Id}
+	</update>
+
+    <!--根据id查询日志******************************************************************************************** -->
+
+    <select id="totalTaskLogByTaskId" resultType="long">
+		select count(*) from
+		mon_task_log
+		where task_id=#{task_id}
+	</select>
+
+    <!-- ********************************************************************************************* -->
+
+    <select id="getLogiIdsByScope" resultType="long">
+        SELECT t.id FROM mon_task_log t LEFT JOIN mon_task t2 ON t.`task_id` = t2.`id` where 1=1
+        <if test="ids != null and ids.size() > 0"> AND t2.org_id in
+            <foreach collection="ids" index="index" item="item" open="(" separator="," close=")"> #{item} </foreach>
+        </if>
+        <if test='ids==null or ids.size() == 0'>
+             AND t2.user_id=#{id}
+        </if>
+    </select>
+
+    <select id="findDevLog" parameterType="com.zone.quartz_module.param.FindDevLogBean"
+            resultType="com.zone.quartz_module.pojo.TaskLog">
+        SELECT * FROM mon_task_log t LEFT JOIN mon_task_detail t2 ON t.`task_detail_id` = t2.`id` LEFT JOIN mon_task t3 ON t.`task_id` = t3.`id`
+        where t2.`data`!="" AND t2.task_type=2
+
+        <if test="object_ids != null and object_ids.size() > 0">
+            AND t2.object_id in
+            <foreach collection="object_ids" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='object_ids==null or object_ids.size() == 0'>
+            and 1=0
+        </if>
+
+        <if test="org_ids != null and org_ids.size() > 0"> AND t3.org_id in
+            <foreach collection="org_ids" index="index" item="item" open="(" separator="," close=")"> #{item} </foreach>
+        </if>
+        <if test="org_ids == null or org_ids.size() == 0"> AND t3.user_id=#{user_id}</if>
+        <if test="end_time != null">
+            <if test="start_time != null">
+                AND t.run_time between #{start_time} and #{end_time}
+            </if>
+        </if>
+        <if test="order != null">
+            <if test="order == 1">
+                ORDER BY run_time asc,t.id asc
+            </if>
+            <if test="order != 1">
+                ORDER BY run_time desc,t.id desc
+            </if>
+        </if>
+        <if test="order == null">
+            ORDER BY run_time desc,t.id desc
+        </if>
+        <if test="page.startNumber != null">
+            limit #{page.startNumber},#{page.pageSize}
+        </if>
+    </select>
+
+    <select id="findDevLogCount" parameterType="com.zone.quartz_module.param.FindDevLogBean" resultType="java.lang.Long">
+        SELECT count(*) FROM mon_task_log t LEFT JOIN mon_task_detail t2 ON t.`task_detail_id` = t2.`id` LEFT JOIN mon_task t3 ON t.`task_id` = t3.`id`
+        where t2.`data`!="" AND t2.task_type=2
+        <if test="object_ids != null and object_ids.size() > 0">
+            AND t2.object_id in
+            <foreach collection="object_ids" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='object_ids==null or object_ids.size() == 0'>
+            and 1=0
+        </if>
+
+        <if test="org_ids != null and org_ids.size() > 0"> AND t3.org_id in
+            <foreach collection="org_ids" index="index" item="item" open="(" separator="," close=")"> #{item} </foreach>
+        </if>
+        <if test="org_ids == null or org_ids.size() == 0"> AND t3.user_id=#{user_id}</if>
+        <if test="end_time != null">
+            <if test="start_time != null">
+                AND t.run_time between #{start_time} and #{end_time}
+            </if>
+        </if>
+        <if test="order != null">
+            <if test="order == 1">
+                ORDER BY run_time asc,t.id asc
+            </if>
+            <if test="order != 1">
+                ORDER BY run_time desc,t.id desc
+            </if>
+        </if>
+        <if test="order == null">
+            ORDER BY run_time desc,t.id desc
+        </if>
+    </select>
+
+    <select id="getTaskDetailByoId" parameterType="long" resultType="com.zone.quartz_module.pojo.Detail">
+		select * from mon_task_detail where id=#{id}
+	</select>
+
+
+</mapper> 

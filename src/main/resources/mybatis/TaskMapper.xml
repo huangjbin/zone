@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zone.quartz_module.mapper.TaskMapper">
+
+	<!-- 修改任务详情***************************************************************** -->
+	<update id="updateTaskDetail" parameterType="com.zone.quartz_module.pojo.Detail">
+		update mon_task_detail
+		<set>
+			<if test="object_id !=null">
+				object_id = #{object_id},
+			</if>
+
+			<if test="param_id !=null">
+				param_id = #{param_id},
+			</if>
+
+			<if test="data !=null">
+				data = #{data},
+			</if>
+
+			<if test="sort !=null">
+				sort = #{sort},
+			</if>
+
+			<if test="remark !=null">
+				remark = #{remark},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<!-- 添加任务定时********************************************************************************************************* -->
+	<sql id="insert_taskschedule_key">
+		<trim suffixOverrides=",">
+			<if test="task_id!=null">
+				task_id,
+			</if>
+			<if test="name!=null">
+				name,
+			</if>
+			<if test="user_id!=null">
+				user_id,
+			</if>
+			<if test="org_id!=null">
+				org_id,
+			</if>
+			<if test="seconds!=null">
+				seconds,
+			</if>
+			<if test="minutes!=null">
+				minutes,
+			</if>
+			<if test="hours!=null">
+				hours,
+			</if>
+			<if test="dayofMonth!=null">
+				dayofMonth,
+			</if>
+			<if test="month!=null">
+				month,
+			</if>
+			<if test="dayofWeek!=null">
+				dayofWeek,
+			</if>
+			<if test="year!=null">
+				year,
+			</if>
+			<if test="create_time!=null">
+				create_time,
+			</if>
+			<if test="remark!=null">
+				remark,
+			</if>
+			<if test="status!=null">
+				status,
+			</if>
+		</trim>
+	</sql>
+	<!-- sql片段,对用？,id属性值任意 -->
+	<sql id="insert_taskschedule_value">
+		<trim suffixOverrides=",">
+			<if test="task_id!=null">
+				#{task_id},
+			</if>
+			<if test="name!=null">
+				#{name},
+			</if>
+			<if test="user_id!=null">
+				#{user_id},
+			</if>
+			<if test="org_id!=null">
+				#{org_id},
+			</if>
+			<if test="seconds!=null">
+				#{seconds},
+			</if>
+			<if test="minutes!=null">
+				#{minutes},
+			</if>
+			<if test="hours!=null">
+				#{hours},
+			</if>
+			<if test="dayofMonth!=null">
+				#{dayofMonth},
+			</if>
+			<if test="month!=null">
+				#{month},
+			</if>
+			<if test="dayofWeek!=null">
+				#{dayofWeek},
+			</if>
+			<if test="year!=null">
+				#{year},
+			</if>
+			<if test="create_time!=null">
+				#{create_time},
+			</if>
+			<if test="remark!=null">
+				#{remark},
+			</if>
+			<if test="status!=null">
+				#{status},
+			</if>
+		</trim>
+	</sql>
+	<insert id="addTaskSchedule" parameterType="com.zone.quartz_module.pojo.Schedule">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			select
+			@@IDENTITY as id
+		</selectKey>
+		insert into mon_task_schedule(
+		<include refid="insert_taskschedule_key" />
+		) values(
+		<include refid="insert_taskschedule_value" />
+		)
+	</insert>
+	<!-- 添加任务********************************************************************************************************* -->
+	<sql id="insert_task_key">
+		<trim suffixOverrides=",">
+			<if test="name!=null">
+				name,
+			</if>
+			<if test="create_time!=null">
+				create_time,
+			</if>
+			<if test="remark!=null">
+				remark,
+			</if>
+			<if test="status!=null">
+				status,
+			</if>
+			<if test="user_id!=null">
+				user_id,
+			</if>
+			<if test="org_id!=null">
+				org_id,
+			</if>
+		</trim>
+	</sql>
+	<!-- sql片段,对用？,id属性值任意 -->
+	<sql id="insert_task_value">
+		<trim suffixOverrides=",">
+			<if test="name!=null">
+				#{name},
+			</if>
+			<if test="create_time!=null">
+				#{create_time},
+			</if>
+			<if test="remark!=null">
+				#{remark},
+			</if>
+			<if test="status!=null">
+				#{status},
+			</if>
+			<if test="user_id!=null">
+				#{user_id},
+			</if>
+			<if test="org_id!=null">
+				#{org_id},
+			</if>
+
+		</trim>
+	</sql>
+	<insert id="addTask" parameterType="com.zone.quartz_module.pojo.Task">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			select
+			@@IDENTITY as id
+		</selectKey>
+		insert into mon_task(
+		<include refid="insert_task_key" />
+		) values(
+		<include refid="insert_task_value" />
+		)
+	</insert>
+	<!-- 添加任务明细********************************************************************************************************* -->
+	<sql id="insert_taskdetail_key">
+		<trim suffixOverrides=",">
+			<if test="task_id!=null">
+				task_id,
+			</if>
+			<if test="object_id!=null">
+				object_id,
+			</if>
+			<if test="task_type!=null">
+				task_type,
+			</if>
+			<if test="notice_user_type!=null">
+				notice_user_type,
+			</if>
+			<if test="param_id!=null">
+				param_id,
+			</if>
+			<if test="data!=null">
+				data,
+			</if>
+			<if test="sort!=null">
+				sort,
+			</if>
+			<if test="remark!=null">
+				remark,
+			</if>
+		</trim>
+	</sql>
+	<!-- sql片段,对用？,id属性值任意 -->
+	<sql id="insert_taskdetail_value">
+		<trim suffixOverrides=",">
+			<if test="task_id!=null">
+				#{task_id},
+			</if>
+			<if test="object_id!=null">
+				#{object_id},
+			</if>
+			<if test="task_type!=null">
+				#{task_type},
+			</if>
+			<if test="notice_user_type!=null">
+				#{notice_user_type},
+			</if>
+			<if test="param_id!=null">
+				#{param_id},
+			</if>
+			<if test="data!=null">
+				#{data},
+			</if>
+			<if test="sort!=null">
+				#{sort},
+			</if>
+			<if test="remark!=null">
+				#{remark},
+			</if>
+		</trim>
+	</sql>
+	<insert id="addTaskDetail" parameterType="com.zone.quartz_module.pojo.Detail">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			select
+			@@IDENTITY as id
+		</selectKey>
+		insert into mon_task_detail(
+		<include refid="insert_taskdetail_key" />
+		) values(
+		<include refid="insert_taskdetail_value" />
+		)
+	</insert>
+	<!-- 查询定时器总数***************************************************************** -->
+	<select id="findScheduleTaskCount" resultType="long">
+		select count(*) from
+		mon_task_schedule where 1=1
+
+		<if test="type != null">
+			and `type` =#{type}
+		</if>
+		<if test="status != null">
+			and `status` =#{status}
+		</if>
+		<if test="org_ids != null and org_ids.size() > 0">
+		 and org_id IN
+		<foreach collection="org_ids" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
+		<if test='org_ids==null or org_ids.size() == 0'>
+			<if test="user_id != null">
+				and `user_id` =#{user_id}
+			</if>
+		</if>
+	</select>
+	<!-- 根据id查找任务********************************************************************************************************* -->
+	<select id="findTaskbyId" parameterType="long"
+			resultType="com.zone.quartz_module.pojo.Task_Detail">
+		SELECT * from mon_task where `id`=#{id}
+	</select>
+    <!-- 根据id查找任务********************************************************************************************************* -->
+    <select id="findScheduleTaskbyId" parameterType="long"
+            resultType="com.zone.quartz_module.pojo.TaskScheduleDetail">
+		SELECT * from mon_task where `id`=#{id}
+	</select>
+	<!-- 查询定时器***************************************************************** -->
+	<select id="findSchedule" parameterType="com.zone.quartz_module.param.FindTask" resultType="com.zone.quartz_module.pojo.Schedule_Task_Detail">
+		select * from mon_task_schedule where 1=1
+		<if test="name != null">
+			and `name` LIKE CONCAT('%',#{name},'%')
+		</if>
+
+		<if test="status != null">
+			and `status`=#{status}
+		</if>
+		<if test="status == null">
+			and `status`!=2
+		</if>
+		<if test="type != null">
+			and `type`=#{type}
+		</if>
+		<if test="org_ids != null and org_ids.size() > 0">
+			and org_id IN
+			<foreach collection="org_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test='org_ids==null or org_ids.size() == 0'>
+			<if test="user_id != null">
+				and `user_id` =#{user_id}
+			</if>
+		</if>
+		ORDER BY create_time desc,id desc
+		<if test="page.startNumber != null">
+			limit #{page.startNumber},#{page.pageSize}
+		</if>
+	</select>
+	<select id="findScheduleCount" parameterType="com.zone.quartz_module.param.FindTask" resultType="long">
+		select count(*) from mon_task_schedule where 1=1
+
+		<if test="status != null">
+			and `status`=#{status}
+		</if>
+		<if test="status == null">
+			and `status`!=2
+		</if>
+		<if test="type != null">
+			and `type`=#{type}
+		</if>
+		<if test="org_ids != null and org_ids.size() > 0">
+			and org_id IN
+			<foreach collection="org_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test='org_ids==null or org_ids.size() == 0'>
+			<if test="user_id != null">
+				and `user_id` =#{user_id}
+			</if>
+		</if>
+	</select>
+	<!-- 根据任务id查找任务定时********************************************************************************************************* -->
+	<select id="selectScheduleByTaskId" parameterType="java.lang.Long" resultType="com.zone.quartz_module.pojo.Schedule">
+		select * from mon_task_schedule where task_id=#{task_id}
+	</select>
+	<select id="selectScheduleTDByScheduleId" parameterType="java.lang.Long" resultType="com.zone.quartz_module.pojo.Schedule_Task_Detail">
+		select * from mon_task_schedule where id=#{id}
+	</select>
+	<!-- 根据定时器id查询对应任务***************************************************************** -->
+	<select id="findTask_DetailByScheduleId" parameterType="long" resultType="com.zone.quartz_module.pojo.Task_Detail">
+	select * from mon_task where id=#{scheduleId}
+	</select>
+	<!-- 根据任务id查找任务明细********************************************************************************************************* -->
+	<select id="selectTaskDetailByTaskId" parameterType="java.lang.Long" resultType="com.zone.quartz_module.pojo.Detail">
+		select * from mon_task_detail where task_id=#{task_id}
+	</select>
+	<!-- 更新定时任务状态********************************************************************************************************* -->
+	<update id="updateTaskScheduleStatusbyId" >
+		update mon_task_schedule set
+		status = #{status} where id = #{id}
+	</update>
+	<!-- 修改任务定时器***************************************************************** -->
+	<update id="updateTaskSchedule" parameterType="com.zone.quartz_module.pojo.Schedule_Task_Detail">
+		update mon_task_schedule
+		<set>
+			<if test="seconds !=null">
+				seconds = #{seconds},
+			</if>
+
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="user_id!=null">
+                user_id = #{user_id},
+            </if>
+            <if test="org_id!=null">
+                org_id = #{org_id},
+            </if>
+
+			<if test="minutes !=null">
+				minutes = #{minutes},
+			</if>
+
+			<if test="hours !=null">
+				hours = #{hours},
+			</if>
+
+			<if test="dayofMonth !=null">
+				dayofMonth = #{dayofMonth},
+			</if>
+
+			<if test="month !=null">
+				month = #{month},
+			</if>
+
+			<if test="dayofWeek !=null">
+				dayofWeek = #{dayofWeek},
+			</if>
+
+			<if test="year !=null">
+				year = #{year},
+			</if>
+
+			<if test="remark !=null">
+				remark = #{remark},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<!-- 修改任务***************************************************************** -->
+	<update id="updateTask" parameterType="com.zone.quartz_module.pojo.Task_Detail">
+		update mon_task
+		<set>
+			<if test="name !=null">
+				name = #{name},
+			</if>
+
+            <if test="action !=null">
+                action = #{action},
+            </if>
+
+            <if test="user_id !=null">
+                user_id = #{user_id},
+            </if>
+
+            <if test="org_id !=null">
+                org_id = #{org_id},
+            </if>
+
+			<if test="remark !=null">
+				remark = #{remark},
+			</if>
+
+			<if test="status !=null">
+				status = #{status},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<!-- 修改任务********************************************************************************************************* -->
+	<update id="updateScheduleTaskId" parameterType="long">
+		update mon_task_schedule set task_id = #{task_id} where id=#{id}
+	</update>
+	<!-- 根据task_id删除derail********************************************************************************************************* -->
+	<delete id="deleteDetailByTaskId" parameterType="long">
+		delete from mon_task_detail where task_id=#{task_id}
+	</delete>
+	<!-- 根据id查找定时器********************************************************************************************************* -->
+	<select id="selectScheduleById" parameterType="java.lang.Long" resultType="com.zone.quartz_module.pojo.Schedule">
+	select * from mon_task_schedule where id=#{scheduleId}
+    </select>
+
+	<!-- 查询任务********************************************************************************************************* -->
+	<!--<select id="selectTask" parameterType="com.zone.quartz_module.param.FindTask" resultType="com.zone.quartz_module.pojo.TaskScheduleDetail">-->
+       <!--select * from mon_task m_t where EXISTS(select m_t_s.task_id from mon_task_schedule m_t_s where task_id=m_t.id)-->
+       <!--<if test="name != null">-->
+               <!--and `name` LIKE CONCAT('%',#{name},'%')-->
+       <!--</if>-->
+       <!--<if test="status != null">-->
+               <!--and `status`=#{status}-->
+       <!--</if>-->
+       <!--<if test="page.startNumber != null">-->
+               <!--limit #{page.startNumber},#{page.pageSize}-->
+       <!--</if>-->
+    <!--</select>-->
+
+	<select id="selectuIdBytaskId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT t_d.object_id from mon_task_detail t_d where 1=1
+		<if test='task_ids!=null and task_ids.size() > 0'>
+			and task_id in
+			<foreach collection="task_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test='task_ids==null or task_ids.size() == 0'>
+			and 1=0
+		</if>
+
+
+    </select>
+
+
+	<select id="getScheduleCount"  resultType="java.lang.Integer">
+		select count(*) from mon_task_schedule where `status`=0 and type=0
+	</select>
+
+	<select id="selectTIdByUtaskId" parameterType="java.lang.Integer"  resultType="java.lang.Integer">
+		SELECT t_d.task_id from mon_task_detail t_d where object_id = #{user_id} and 1=1
+
+
+		<if test='task_ids!=null and task_ids.size() > 0'>
+			 and task_id in
+			<foreach collection="task_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test='task_ids==null or task_ids.size() == 0'>
+			and 1=0
+		</if>
+
+
+
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+</mapper> 
